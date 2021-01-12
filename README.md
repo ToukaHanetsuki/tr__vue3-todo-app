@@ -15,6 +15,11 @@ yarn serve
 yarn build
 ```
 
+### Compiles and minifies for Github pages
+```
+yarn build:docs
+```
+
 ### Lints and fixes files
 ```
 yarn lint
