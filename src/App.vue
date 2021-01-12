@@ -3,11 +3,12 @@
 
   <h2>登録フォーム</h2>
   <InputTaskForm @submit="addTask" />
+
+  <h2>タスクテーブル</h2>
   <TaskTable
     :tasks="tasks"
     @deleteTask="deleteTask"
   />
-  <pre><code>{{ tasks }}</code></pre>
 </template>
 
 <script>
