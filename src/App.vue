@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import InputTaskForm from '@/components/InputTaskForm.vue'
+import InputTaskForm from '@/components/InputTaskForm.vue';
 import { v4 as uuid } from 'uuid';
 import dayjs from 'dayjs';
 
@@ -65,7 +65,7 @@ export default {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(this.tasks));
     }
   }
-}
+};
 </script>
 
 <style scoped>

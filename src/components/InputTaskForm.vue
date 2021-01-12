@@ -43,12 +43,12 @@ const initializeForm = () => ({
 });
 
 export default {
-  name: "InputTaskForm",
+  name: 'InputTaskForm',
   emits: {
     submit: null
   },
   data: () => ({
-    form: initializeForm(), // 入力フォーム
+    form: initializeForm() // 入力フォーム
   }),
   computed: {
     /** 締め切り日の最小値の算出 */
@@ -66,5 +66,5 @@ export default {
       this.form = initializeForm();
     }
   }
-}
+};
 </script>
