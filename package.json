@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "build:docs": "PUBLIC_PATH=/template__vue_cli/ yarn build --dest docs",
+    "build:docs": "PUBLIC_PATH=/tr__vue3-todo-app/ yarn build --dest docs",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
