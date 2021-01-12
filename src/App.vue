@@ -3,18 +3,24 @@
 
   <h2>登録フォーム</h2>
   <InputTaskForm @submit="addTask" />
+  <TaskTable
+    :tasks="tasks"
+    @deleteTask="deleteTask"
+  />
   <pre><code>{{ tasks }}</code></pre>
 </template>
 
 <script>
 import InputTaskForm from '@/components/InputTaskForm.vue';
+import TaskTable from '@/components/TaskTable.vue';
 import { StorageService } from '@/service/storageService';
 import { TaskModel } from '@/model/taskModel';
 
 export default {
   name: 'App',
   components: {
-    InputTaskForm
+    InputTaskForm,
+    TaskTable
   },
   data: () => ({
     tasks: [] // タスクリスト
@@ -24,6 +30,7 @@ export default {
     this.fetchTasksToStorage();
   },
   methods: {
+
     /** リストにタスクを追加する */
     addTask(params) {
       // 入力値を元にタスクを作成する
@@ -32,18 +39,23 @@ export default {
       // リストにタスクを追加する
       this.tasks.push(task);
 
-      // タスクリストの保存
-      this.saveTasksToStorage();
+      // ローカルストレージにタスクリストを保存
+      StorageService.saveTasks(this.tasks);
     },
+
+    /** リストからタスクを削除する */
+    deleteTask(targetId) {
+      // 対象のID以外を抽出して反映
+      this.tasks = this.tasks.filter(v => v.id !== targetId);
+
+      // ローカルストレージにタスクリストを保存
+      StorageService.saveTasks(this.tasks);
+    },
+
     /** タスクリストを取得する */
     fetchTasksToStorage() {
       // 取得したリストをdataに反映
-      this.task = StorageService.fetchTasks();
-    },
-    /** タスクリストを保存する */
-    saveTasksToStorage() {
-      // ローカルストレージにタスクリストを保存
-      StorageService.saveTasks(this.tasks);
+      this.tasks = StorageService.fetchTasks();
     }
   }
 };
