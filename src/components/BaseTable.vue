@@ -23,13 +23,13 @@
     </thead>
     <tbody>
       <tr
-        v-for="task in tasks"
-        :key="task.id"
+        v-for="record in records"
+        :key="record.id"
       >
         <th v-if="before">
           <slot
             name="td-before"
-            :task="task"
+            :record="record"
           />
         </th>
         <td
@@ -37,16 +37,16 @@
           :key="key"
         >
           <slot
-            :task="task"
+            :[key]="record[key]"
             :name="`td-${key}`"
           >
-            {{ task[key] }}
+            {{ record[key] }}
           </slot>
         </td>
         <td v-if="after">
           <slot
             name="td-after"
-            :task="task"
+            :record="record"
           />
         </td>
       </tr>
@@ -71,7 +71,7 @@ export default {
       require: true,
       default: () => []
     },
-    tasks: {
+    records: {
       type: Array,
       require: true,
       default: () => []

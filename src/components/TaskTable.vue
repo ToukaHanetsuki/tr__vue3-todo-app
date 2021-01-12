@@ -1,6 +1,6 @@
 <template>
   <BaseTable
-    :tasks="tasks"
+    :records="tasks"
     :keys="headerKeys"
     :after="true"
   >
@@ -13,14 +13,14 @@
     </template>
 
     <!-- tbody -->
-    <template #td-deadlineAt="{ task }">
-      {{ formatDateTime(task.deadlineAt) }}
+    <template #td-deadlineAt="{ deadlineAt }">
+      {{ formatDateTime(deadlineAt) }}
     </template>
-    <template #td-createdAt="{ task }">
-      {{ formatDateTime(task.createdAt) }}
+    <template #td-createdAt="{ createdAt }">
+      {{ formatDateTime(createdAt) }}
     </template>
-    <template #td-completeAt="{ task }">
-      {{ formatDateTime(task.completeAt) }}
+    <template #td-completeAt="{ completeAt }">
+      {{ formatDateTime(completeAt) }}
     </template>
 
     <!-- after -->
