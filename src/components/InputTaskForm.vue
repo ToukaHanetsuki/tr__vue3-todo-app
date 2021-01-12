@@ -4,7 +4,7 @@
       <label>
         タスク名
         <input
-          v-model="form.taskName"
+          v-model="form.name"
           type="text"
           required
         >
@@ -38,7 +38,7 @@ const getCurrentAt = () => dayjs().format('YYYY-MM-DDTHH:mm');
 
 /** 入力フォームの初期値を作成 */
 const initializeForm = () => ({
-  taskName: '',
+  name: '',
   deadlineAt: getCurrentAt()
 });
 
