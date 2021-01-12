@@ -9,7 +9,7 @@
 <script>
 import InputTaskForm from '@/components/InputTaskForm.vue';
 import { StorageService } from '@/service/storageService';
-import { TaskModel } from '@/model/TaskModel';
+import { TaskModel } from '@/model/taskModel';
 
 export default {
   name: 'App',
