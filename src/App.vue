@@ -8,9 +8,8 @@
 
 <script>
 import InputTaskForm from '@/components/InputTaskForm.vue';
-import { v4 as uuid } from 'uuid';
-import dayjs from 'dayjs';
 import { StorageService } from '@/service/storageService';
+import { TaskModel } from '@/model/TaskModel';
 
 export default {
   name: 'App',
@@ -28,23 +27,13 @@ export default {
     /** リストにタスクを追加する */
     addToTasks(params) {
       // 入力値を元にタスクを作成する
-      const task = this.createTask(params);
+      const task = new TaskModel(params);
 
       // リストにタスクを追加する
       this.tasks.push(task);
 
       // タスクリストの保存
       this.saveTasksToStorage();
-    },
-    /** 引数を元にタスクを作成する */
-    createTask(params) {
-      return {
-        id: uuid(), // 固有ID
-        createdAt: dayjs().format('YYYY-MM-DDTHH:mm'), // 現在時刻
-        compuleteAt: null, // 完了時刻
-        status: 0, // タスクステータス
-        ...params // スプレッド演算子で引数を分解
-      };
     },
     /** タスクリストを取得する */
     fetchTasksToStorage() {
