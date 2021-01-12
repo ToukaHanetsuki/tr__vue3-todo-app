@@ -2,7 +2,7 @@
   <h1>Vue3 TODO APP</h1>
 
   <h2>登録フォーム</h2>
-  <InputTaskForm @submit="addToTasks" />
+  <InputTaskForm @submit="addTask" />
   <pre><code>{{ tasks }}</code></pre>
 </template>
 
@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     /** リストにタスクを追加する */
-    addToTasks(params) {
+    addTask(params) {
       // 入力値を元にタスクを作成する
       const task = new TaskModel(params);
 
