@@ -24,8 +24,8 @@
     </template>
 
     <!-- after -->
-    <template #td-after="{ task }">
-      <button @click="deleteTask(task.id)">
+    <template #td-after="{ record }">
+      <button @click="deleteTask(record.id)">
         削除
       </button>
     </template>
