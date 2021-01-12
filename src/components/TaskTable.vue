@@ -22,6 +22,20 @@
     <template #td-completeAt="{ completeAt }">
       {{ formatDateTime(completeAt) }}
     </template>
+    <template #td-status="{ status, id }">
+      <select
+        :value="status"
+        @change="changeStatus($event, id)"
+      >
+        <option
+          v-for="option in statusOptions"
+          :key="option.value"
+          :value="option.value"
+        >
+          {{ option.label }}
+        </option>
+      </select>
+    </template>
 
     <!-- after -->
     <template #td-after="{ record }">
@@ -35,6 +49,7 @@
 <script>
 import BaseTable from '@/components/BaseTable.vue';
 import dayjs from 'dayjs';
+import { TASK_STATUS, TASK_STATUS_LABEL } from '@/model/taskModel';
 
 export default {
   name: 'TaskTable',
@@ -49,7 +64,8 @@ export default {
     }
   },
   emits: {
-    deleteTask: null
+    deleteTask: null,
+    changeStatus: null
   },
   data: () => ({
     headers: [
@@ -64,6 +80,12 @@ export default {
     /** ヘッダーのキー配列の算出 */
     headerKeys() {
       return this.headers.map(v => v.key);
+    },
+    /** ステータスの選択肢を算出 */
+    statusOptions() {
+      return Object.entries(TASK_STATUS).map(([key, value]) => {
+        return { value, label: TASK_STATUS_LABEL[key]};
+      });
     }
   },
   methods: {
@@ -74,8 +96,16 @@ export default {
       return date && dayjs(date).format('YYYY年MM月DD日 HH:mm');
     },
 
+    /** 親コンポーネントに削除イベントを通知する */
     deleteTask(targetId) {
       this.$emit('deleteTask', targetId);
+    },
+
+    /** 親コンポーネントにステータス変更を通知する */
+    changeStatus(event, id) {
+      // 第一引数: value
+      // 第二引数: id
+      this.$emit('changeStatus', event.target.value, id);
     }
   }
 };

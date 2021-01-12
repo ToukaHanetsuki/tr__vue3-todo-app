@@ -37,7 +37,7 @@
           :key="key"
         >
           <slot
-            :[key]="record[key]"
+            v-bind="record"
             :name="`td-${key}`"
           >
             {{ record[key] }}

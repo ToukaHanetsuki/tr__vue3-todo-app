@@ -8,6 +8,7 @@
   <TaskTable
     :tasks="tasks"
     @deleteTask="deleteTask"
+    @changeStatus="changeStatus"
   />
 </template>
 
@@ -48,6 +49,18 @@ export default {
     deleteTask(targetId) {
       // 対象のID以外を抽出して反映
       this.tasks = this.tasks.filter(v => v.id !== targetId);
+
+      // ローカルストレージにタスクリストを保存
+      StorageService.saveTasks(this.tasks);
+    },
+
+    /** タスクのステータスを変更 */
+    changeStatus(newStatus, targetId) {
+      // 対象のIDのタスクを検索
+      const target = this.tasks.find(v => v.id === targetId);
+
+      // ステータスを更新
+      target.status = newStatus;
 
       // ローカルストレージにタスクリストを保存
       StorageService.saveTasks(this.tasks);
