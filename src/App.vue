@@ -10,9 +10,7 @@
 import InputTaskForm from '@/components/InputTaskForm.vue';
 import { v4 as uuid } from 'uuid';
 import dayjs from 'dayjs';
-
-/** タスクリストを保存するストレージのKEY */
-const STORAGE_KEY = 'tasks';
+import { StorageService } from '@/service/storageService';
 
 export default {
   name: 'App',
@@ -48,21 +46,15 @@ export default {
         ...params // スプレッド演算子で引数を分解
       };
     },
-    /** ローカルストレージからタスクリストを取得する */
+    /** タスクリストを取得する */
     fetchTasksToStorage() {
-      // ローカルストレージからリストを取得
-      const tasks = localStorage.getItem(STORAGE_KEY);
-
-      // リストの存在確認
-      if (tasks) {
-        // 取得したリストをdataに上書き
-        this.tasks = JSON.parse(tasks);
-      }
+      // 取得したリストをdataに反映
+      this.task = StorageService.fetchTasks();
     },
-    /** ローカルストレージにタスクリストを保存する */
+    /** タスクリストを保存する */
     saveTasksToStorage() {
       // ローカルストレージにタスクリストを保存
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(this.tasks));
+      StorageService.saveTasks(this.tasks);
     }
   }
 };
