@@ -32,39 +32,39 @@
 
 <script>
 import dayjs from 'dayjs';
-
-/** 現在の時刻を取得 */
-const getCurrentAt = () => dayjs().format('YYYY-MM-DDTHH:mm');
-
-/** 入力フォームの初期値を作成 */
-const initializeForm = () => ({
-  name: '',
-  deadlineAt: getCurrentAt()
-});
+import { ref, computed } from 'vue';
 
 export default {
   name: 'InputTaskForm',
   emits: {
     submit: null
   },
-  data: () => ({
-    form: initializeForm() // 入力フォーム
-  }),
-  computed: {
-    /** 締め切り日の最小値の算出 */
-    minDeadlineAt() {
-      return getCurrentAt();
-    }
-  },
-  methods: {
-    /** 親コンポーネントに入力値を送る */
-    submit() {
-      // 親コンポーネントに入力値を送る
-      this.$emit('submit', this.form);
+  setup(props, ctx) {
+    /** 入力フォーム */
+    const form = ref(initializeForm());
 
-      // 入力値の初期化
-      this.form = initializeForm();
-    }
+    /** 入力フォームの初期値を作成 */
+    const initializeForm = () => ({
+      name: '',
+      deadlineAt: getCurrentAt()
+    });
+
+    /** 現在の時刻を取得 */
+    const getCurrentAt = () => dayjs().format('YYYY-MM-DDTHH:mm');
+
+    return {
+      form,
+      /** 締め切り日の最小値の算出 */
+      minDeadlineAt: computed(() => getCurrentAt()),
+      /** 親コンポーネントに入力値を送る */
+      submit: () => {
+        // 親コンポーネントに入力値を送る
+        ctx.emit('submit', form.value);
+
+        // 入力値の初期化
+        form.value = initializeForm();
+      }
+    };
   }
 };
 </script>
