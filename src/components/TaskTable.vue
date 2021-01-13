@@ -67,7 +67,7 @@ export default {
     deleteTask: null,
     changeStatus: null
   },
-  setup(props, cxt) {
+  setup(props, ctx) {
     /** テーブルヘッダー */
     const headers = ref([
       {key: 'name', label: 'タスク名'},
@@ -99,14 +99,14 @@ export default {
 
       /** 親コンポーネントに削除イベントを通知する */
       deleteTask: (targetId) => {
-        cxt.emit('deleteTask', targetId);
+        ctx.emit('deleteTask', targetId);
       },
 
       /** 親コンポーネントにステータス変更を通知する */
       changeStatus: (event, id) => {
         // 第一引数: value
         // 第二引数: id
-        cxt.emit('changeStatus', event.target.value, id);
+        ctx.emit('changeStatus', event.target.value, id);
       }
     };
   }
