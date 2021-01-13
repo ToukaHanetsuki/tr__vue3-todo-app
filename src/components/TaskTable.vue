@@ -60,8 +60,7 @@ export default {
   props: {
     tasks: {
       type: Array,
-      require: true,
-      default: () => []
+      required: true
     }
   },
   emits: {

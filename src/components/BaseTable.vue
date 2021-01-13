@@ -60,21 +60,19 @@ export default {
   props: {
     before: {
       type: Boolean,
-      require: true
+      required: true
     },
     after: {
       type: Boolean,
-      require: true
+      required: true
     },
     keys: {
       type: Array,
-      require: true,
-      default: () => []
+      required: true
     },
     records: {
       type: Array,
-      require: true,
-      default: () => []
+      required: true
     }
   }
 };
