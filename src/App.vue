@@ -17,6 +17,7 @@ import InputTaskForm from '@/components/InputTaskForm.vue';
 import TaskTable from '@/components/TaskTable.vue';
 import { StorageService } from '@/service/storageService';
 import { TaskModel } from '@/model/taskModel';
+import { ref, onBeforeMount } from 'vue';
 
 export default {
   name: 'App',
@@ -24,53 +25,54 @@ export default {
     InputTaskForm,
     TaskTable
   },
-  data: () => ({
-    tasks: [] // タスクリスト
-  }),
-  created() {
-    // タスクリストの取得
-    this.fetchTasksToStorage();
-  },
-  methods: {
-
-    /** リストにタスクを追加する */
-    addTask(params) {
-      // 入力値を元にタスクを作成する
-      const task = new TaskModel(params);
-
-      // リストにタスクを追加する
-      this.tasks.push(task);
-
-      // ローカルストレージにタスクリストを保存
-      StorageService.saveTasks(this.tasks);
-    },
-
-    /** リストからタスクを削除する */
-    deleteTask(targetId) {
-      // 対象のID以外を抽出して反映
-      this.tasks = this.tasks.filter(v => v.id !== targetId);
-
-      // ローカルストレージにタスクリストを保存
-      StorageService.saveTasks(this.tasks);
-    },
-
-    /** タスクのステータスを変更 */
-    changeStatus(newStatus, targetId) {
-      // 対象のIDのタスクを検索
-      const target = this.tasks.find(v => v.id === targetId);
-
-      // ステータスを更新
-      target.status = newStatus;
-
-      // ローカルストレージにタスクリストを保存
-      StorageService.saveTasks(this.tasks);
-    },
+  setup() {
+    /** タスクリスト */
+    const tasks = ref([]);
 
     /** タスクリストを取得する */
-    fetchTasksToStorage() {
+    const fetchTasksToStorage = () => {
       // 取得したリストをdataに反映
-      this.tasks = StorageService.fetchTasks();
-    }
+      tasks.value = StorageService.fetchTasks();
+    };
+
+    onBeforeMount(() => {
+      // タスクリストの取得
+      fetchTasksToStorage();
+    });
+
+    return {
+      tasks,
+      /** リストにタスクを追加する */
+      addTask: (params) => {
+        // 入力値を元にタスクを作成する
+        const task = new TaskModel(params);
+
+        // リストにタスクを追加する
+        tasks.value.push(task);
+
+        // ローカルストレージにタスクリストを保存
+        StorageService.saveTasks(tasks.value);
+      },
+      /** リストからタスクを削除する */
+      deleteTask: (targetId) => {
+        // 対象のID以外を抽出して反映
+        tasks.value = tasks.value.filter(v => v.id !== targetId);
+
+        // ローカルストレージにタスクリストを保存
+        StorageService.saveTasks(tasks.value);
+      },
+      /** タスクのステータスを変更 */
+      changeStatus: (newStatus, targetId) => {
+        // 対象のIDのタスクを検索
+        const target = tasks.value.find(v => v.id === targetId);
+
+        // ステータスを更新
+        target.status = newStatus;
+
+        // ローカルストレージにタスクリストを保存
+        StorageService.saveTasks(tasks.value);
+      }
+    };
   }
 };
 </script>
