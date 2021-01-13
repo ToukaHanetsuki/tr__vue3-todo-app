@@ -92,19 +92,19 @@ export default {
       }),
 
       /** 日付をフォーマット */
-      formatDateTime(date) {
+      formatDateTime: (date) => {
         // dateの存在チェック
         // undefinedだった場合はそのまま返す
         return date && dayjs(date).format('YYYY年MM月DD日 HH:mm');
       },
 
       /** 親コンポーネントに削除イベントを通知する */
-      deleteTask(targetId) {
+      deleteTask: (targetId) => {
         cxt.emit('deleteTask', targetId);
       },
 
       /** 親コンポーネントにステータス変更を通知する */
-      changeStatus(event, id) {
+      changeStatus: (event, id) => {
         // 第一引数: value
         // 第二引数: id
         cxt.emit('changeStatus', event.target.value, id);
