@@ -50,6 +50,7 @@
 import BaseTable from '@/components/BaseTable.vue';
 import dayjs from 'dayjs';
 import { TASK_STATUS, TASK_STATUS_LABEL } from '@/model/taskModel';
+import { ref, computed } from 'vue';
 
 export default {
   name: 'TaskTable',
@@ -67,46 +68,48 @@ export default {
     deleteTask: null,
     changeStatus: null
   },
-  data: () => ({
-    headers: [
+  setup(props, cxt) {
+    /** テーブルヘッダー */
+    const headers = ref([
       {key: 'name', label: 'タスク名'},
       {key: 'deadlineAt', label: '期日'},
       {key: 'createdAt', label: '作成日'},
       {key: 'completeAt', label: '完了日'},
       {key: 'status', label: '状態'}
-    ] // テーブルヘッダー
-  }),
-  computed: {
-    /** ヘッダーのキー配列の算出 */
-    headerKeys() {
-      return this.headers.map(v => v.key);
-    },
-    /** ステータスの選択肢を算出 */
-    statusOptions() {
-      return Object.entries(TASK_STATUS).map(([key, value]) => {
-        return { value, label: TASK_STATUS_LABEL[key]};
-      });
-    }
-  },
-  methods: {
-    /** 日付をフォーマット */
-    formatDateTime(date) {
-      // dateの存在チェック
-      // undefinedだった場合はそのまま返す
-      return date && dayjs(date).format('YYYY年MM月DD日 HH:mm');
-    },
+    ]);
 
-    /** 親コンポーネントに削除イベントを通知する */
-    deleteTask(targetId) {
-      this.$emit('deleteTask', targetId);
-    },
+    return {
+      headers,
 
-    /** 親コンポーネントにステータス変更を通知する */
-    changeStatus(event, id) {
-      // 第一引数: value
-      // 第二引数: id
-      this.$emit('changeStatus', event.target.value, id);
-    }
+      /** ヘッダーのキー配列の算出 */
+      headerKeys: computed(() => headers.value.map(v => v.key)),
+
+      /** ステータスの選択肢を算出 */
+      statusOptions: computed(() => {
+        return Object.entries(TASK_STATUS).map(([key, value]) => {
+          return { value, label: TASK_STATUS_LABEL[key]};
+        });
+      }),
+
+      /** 日付をフォーマット */
+      formatDateTime(date) {
+        // dateの存在チェック
+        // undefinedだった場合はそのまま返す
+        return date && dayjs(date).format('YYYY年MM月DD日 HH:mm');
+      },
+
+      /** 親コンポーネントに削除イベントを通知する */
+      deleteTask(targetId) {
+        cxt.emit('deleteTask', targetId);
+      },
+
+      /** 親コンポーネントにステータス変更を通知する */
+      changeStatus(event, id) {
+        // 第一引数: value
+        // 第二引数: id
+        cxt.emit('changeStatus', event.target.value, id);
+      }
+    };
   }
 };
 </script>
