@@ -4,7 +4,7 @@
       <label>
         タスク名
         <input
-          v-model="form.name"
+          v-model="internalName"
           type="text"
           required
         >
@@ -14,7 +14,7 @@
       <label>
         期日
         <input
-          v-model="form.deadlineAt"
+          v-model="internalDeadlineAt"
           type="datetime-local"
           :min="minDeadlineAt"
           required
@@ -32,38 +32,43 @@
 
 <script>
 import dayjs from 'dayjs';
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 
 export default {
   name: 'InputTaskForm',
+  props: {
+    name: {
+      type: String,
+      required: true
+    },
+    deadlineAt: {
+      type: String,
+      required: true
+    },
+    minDeadlineAt: {
+      type: String,
+      default: dayjs().format('YYYY-MM-DDTHH:mm')
+    }
+  },
   emits: {
-    submit: null
+    'update:name': null,
+    'update:deadlineAt': null,
+    'submit': null
   },
   setup(props, ctx) {
-    /** 入力フォーム */
-    const form = ref(initializeForm());
-
-    /** 入力フォームの初期値を作成 */
-    const initializeForm = () => ({
-      name: '',
-      deadlineAt: getCurrentAt()
-    });
-
-    /** 現在の時刻を取得 */
-    const getCurrentAt = () => dayjs().format('YYYY-MM-DDTHH:mm');
-
     return {
-      form,
-      /** 締め切り日の最小値の算出 */
-      minDeadlineAt: computed(() => getCurrentAt()),
+      /** タスク名 */
+      internalName: computed({
+        get: () => props.name,
+        set: (v) => ctx.emit('update:name', v)
+      }),
+      /** 期日 */
+      internalDeadlineAt: computed({
+        get: () => props.deadlineAt,
+        set: (v) => ctx.emit('update:deadlineAt', v)
+      }),
       /** 親コンポーネントに入力値を送る */
-      submit: () => {
-        // 親コンポーネントに入力値を送る
-        ctx.emit('submit', form.value);
-
-        // 入力値の初期化
-        form.value = initializeForm();
-      }
+      submit: () => ctx.emit('submit')
     };
   }
 };

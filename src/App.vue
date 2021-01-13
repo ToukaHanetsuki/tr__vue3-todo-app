@@ -2,7 +2,11 @@
   <h1>Vue3 TODO APP</h1>
 
   <h2>登録フォーム</h2>
-  <InputTaskForm @submit="addTask" />
+  <InputTaskForm
+    v-model:name="form.name"
+    v-model:deadlineAt="form.deadlineAt"
+    @submit="addTask"
+  />
 
   <h2>タスクテーブル</h2>
   <TaskTable
@@ -13,11 +17,18 @@
 </template>
 
 <script>
+import dayjs from 'dayjs';
 import InputTaskForm from '@/components/InputTaskForm.vue';
 import TaskTable from '@/components/TaskTable.vue';
 import { StorageService } from '@/service/storageService';
 import { TaskModel } from '@/model/taskModel';
-import { ref, onBeforeMount } from 'vue';
+import { ref, onBeforeMount, reactive } from 'vue';
+
+/** 入力フォームの初期値を作成 */
+const initializeForm = () => ({
+  name: '',
+  deadlineAt: dayjs().format('YYYY-MM-DDTHH:mm')
+});
 
 export default {
   name: 'App',
@@ -26,6 +37,9 @@ export default {
     TaskTable
   },
   setup() {
+    /** 入力フォーム */
+    const form = reactive(initializeForm());
+
     /** タスクリスト */
     const tasks = ref([]);
 
@@ -41,18 +55,26 @@ export default {
     });
 
     return {
+      form,
       tasks,
+
       /** リストにタスクを追加する */
-      addTask: (params) => {
+      addTask: () => {
         // 入力値を元にタスクを作成する
-        const task = new TaskModel(params);
+        const task = new TaskModel(form);
 
         // リストにタスクを追加する
         tasks.value.push(task);
 
         // ローカルストレージにタスクリストを保存
         StorageService.saveTasks(tasks.value);
+
+        // 入力値の初期化
+        Object.entries(initializeForm()).forEach(([key, value]) => {
+          form[key] = value;
+        });
       },
+
       /** リストからタスクを削除する */
       deleteTask: (targetId) => {
         // 対象のID以外を抽出して反映
@@ -61,6 +83,7 @@ export default {
         // ローカルストレージにタスクリストを保存
         StorageService.saveTasks(tasks.value);
       },
+
       /** タスクのステータスを変更 */
       changeStatus: (newStatus, targetId) => {
         // 対象のIDのタスクを検索
