@@ -3,8 +3,8 @@
 
   <h2>登録フォーム</h2>
   <InputTaskForm
-    v-model:name="form.name"
-    v-model:deadlineAt="form.deadlineAt"
+    v-model:name="name"
+    v-model:deadlineAt="deadlineAt"
     @submit="addTask"
   />
 
@@ -22,7 +22,7 @@ import InputTaskForm from '@/components/InputTaskForm.vue';
 import TaskTable from '@/components/TaskTable.vue';
 import { StorageService } from '@/service/storageService';
 import { TaskModel } from '@/model/taskModel';
-import { ref, onBeforeMount, reactive } from 'vue';
+import { ref, onBeforeMount, reactive, toRefs } from 'vue';
 
 /** 入力フォームの初期値を作成 */
 const initializeForm = () => ({
@@ -55,7 +55,7 @@ export default {
     });
 
     return {
-      form,
+      ...toRefs(form),
       tasks,
 
       /** リストにタスクを追加する */
